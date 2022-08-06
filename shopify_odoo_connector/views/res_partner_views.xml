@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="base_view_partner_form_shopify" model="ir.ui.view">
+        <field name="name">res.partner.form</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//sheet" position="before">
+                <header>
+                    <button type="object" name="sync_shopify_customer"
+                            class="oe_highlight" string="Sync"
+                            attrs="{'invisible': [('shopify_instance_id', '=', False)]}"/>
+                </header>
+            </xpath>
+            <xpath expr="//page[@name='sales_purchases']" position="after">
+                <page string="Shopify" name="shopify">
+                    <label for="shopify_instance_id"/>
+                    <field name="shopify_instance_id"/>
+                </page>
+            </xpath>
+        </field>
+    </record>
+</odoo>

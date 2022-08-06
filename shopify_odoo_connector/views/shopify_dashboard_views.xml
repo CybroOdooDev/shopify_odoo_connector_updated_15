@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="shopify_configuration_dashboard_kanban_view" model="ir.ui.view">
+        <field name="name">shopify.configuration.dashboard.kanban</field>
+        <field name="model">shopify.configuration</field>
+        <field name="arch" type="xml">
+            <kanban create="false"
+                    class="oe_background_grey o_kanban_dashboard">
+                <field name="id"/>
+                <field name="name"/>
+                <field name="color"/>
+                <field name="show_on_dashboard"/>
+                <field name="kanban_dashboard"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div t-attf-class="#{!selection_mode ? kanban_color(record.color.raw_value) : ''}">
+                            <t t-value="JSON.parse(record.kanban_dashboard.raw_value)"
+                               t-set="shopify_dashboard"/>
+                            <div t-attf-class="o_kanban_card_header">
+                                <div class="o_kanban_card_header_title">
+                                    <div class="o_primary">
+                                        <a type="object"
+                                           name="open_shopify_instance">
+                                            <field name="name"/>
+                                        </a>
+                                        <t t-if="shopify_dashboard.company_count > 1">
+                                            <span groups="base.group_multi_company"
+                                                  class="small">-
+                                                <field name="company_id"/>
+                                            </span>
+                                        </t>
+                                    </div>
+                                </div>
+                                <div class="o_kanban_manage_button_section">
+                                    <a class="o_kanban_manage_toggle_button"
+                                       href="#">
+                                        <i class="fa fa-ellipsis-v"
+                                           aria-label="Selection" role="img"
+                                           title="Selection"/>
+                                    </a>
+                                </div>
+                            </div>
+                            <div t-attf-class="container o_kanban_card_content">
+                                <div class="row">
+                                    <div class="col-12 col-sm-5 mb-3 mb-sm-0 o_kanban_primary_left"/>
+                                    <div class="col-12 col-sm-7 o_kanban_primary_right">
+                                        <div class="row">
+                                            <span title="Customers">
+                                                <t
+                                                        t-esc="shopify_dashboard.customer_count"/>
+                                                Customers
+                                            </span>
+                                        </div>
+                                        <div class="row">
+                                            <span title="Products">
+                                                <t
+                                                        t-esc="shopify_dashboard.product_count"/>
+                                                Products
+                                            </span>
+                                        </div>
+                                        <div class="row">
+                                            <span title="Sale Orders">
+                                                <t
+                                                        t-esc="shopify_dashboard.sale_count"/>
+                                                Sale Orders
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <field name="kanban_dashboard_graph"
+                                       t-att-graph_type="'line'"
+                                       widget="dashboard_graph"/>
+                            </div>
+                            <div class="container o_kanban_card_manage_pane dropdown-menu"
+                                 role="menu">
+                                <div t-if="widget.editable"
+                                     class="o_kanban_card_manage_settings row">
+                                    <div class="col-8">
+                                        <ul class="oe_kanban_colorpicker"
+                                            data-field="color"/>
+                                    </div>
+                                </div>
+                                <div class="row o_kanban_card_manage_settings">
+                                    <div class="col-6">
+                                        <field name="show_on_dashboard"
+                                               widget="boolean_favorite"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+    <record id="action_open_shopify_instance_dashboard"
+            model="ir.actions.act_window">
+        <field name="name">Shopify Dashboard</field>
+        <field name="res_model">shopify.configuration</field>
+        <field name="view_mode">kanban,form</field>
+        <field name="view_id"
+               ref="shopify_configuration_dashboard_kanban_view"/>
+        <field name="usage">menu</field>
+        <field name="context">{'search_default_dashboard':1}</field>
+        <field name="domain">[]</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_neutral_face">
+                This is Shopify Dashboard
+            </p>
+            <p>
+                If you haven't configured any Shopify accounts with Odoo, please
+                add some Shopify accounts.
+            </p>
+        </field>
+    </record>
+</odoo>
