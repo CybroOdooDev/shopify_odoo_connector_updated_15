@@ -1,0 +1,1 @@
+# shopify_odoo_connector_updated_15
