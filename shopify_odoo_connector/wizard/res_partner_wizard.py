@@ -130,23 +130,6 @@ class CustomerWizard(models.TransientModel):
                      ('shopify_instance_id', '=', shopify_instance.id)])
                 if not exist_customers:
                     vals = {}
-                    if customer['first_name']:
-                        vals['name'] = customer['first_name']
-                    if customer['last_name']:
-                        if customer['first_name']:
-                            vals['name'] = customer['first_name'] + ' ' + \
-                                           customer['last_name']
-                        else:
-                            vals['naem'] = customer['last_name']
-                    if not customer['first_name'] and not customer[
-                        'last_name'] and customer['email']:
-                        vals['name'] = customer['email']
-                    vals['email'] = customer['email']
-                    vals['phone'] = customer['phone']
-                    vals['shopify_customer_id'] = customer['id']
-                    vals['shopify_instance_id'] = shopify_instance.id
-                    vals['synced_customer'] = True
-                    vals['company_id'] = shopify_instance.company_id.id
                     if customer['addresses']:
                         country_id = self.env['res.country'].sudo().search([
                             ('name', '=', customer['addresses'][0]['country'])
@@ -158,30 +141,30 @@ class CustomerWizard(models.TransientModel):
                             'street': customer['addresses'][0]['address1'],
                             'street2': customer['addresses'][0]['address2'],
                             'city': customer['addresses'][0]['city'],
-                            'country_id': country_id.id if country_id else '',
-                            'state_id': state_id.id if state_id else '',
+                            'country_id': country_id.id if country_id else False,
+                            'state_id': state_id.id if state_id else False,
                             'zip': customer['addresses'][0]['zip'],
                         }
+                    if customer['first_name']:
+                        vals['name'] = customer['first_name']
+                    if customer['last_name']:
+                        if customer['first_name']:
+                            vals['name'] = customer['first_name'] + ' ' + \
+                                           customer['last_name']
+                        else:
+                            vals['name'] = customer['last_name']
+                    if not customer['first_name'] and not customer[
+                        'last_name'] and customer['email']:
+                        vals['name'] = customer['email']
+                    vals['email'] = customer['email']
+                    vals['phone'] = customer['phone']
+                    vals['shopify_customer_id'] = customer['id']
+                    vals['shopify_instance_id'] = shopify_instance.id
+                    vals['synced_customer'] = True
+                    vals['company_id'] = shopify_instance.company_id.id
                     self.env['res.partner'].sudo().create(vals)
                 else:
                     vals = {}
-                    if customer['first_name']:
-                        vals['name'] = customer['first_name']
-                    if customer['last_name']:
-                        if customer['first_name']:
-                            vals['name'] = customer['first_name'] + ' ' + \
-                                           customer['last_name']
-                        else:
-                            vals['naem'] = customer['last_name']
-                    if not customer['first_name'] and not customer[
-                        'last_name'] and customer['email']:
-                        vals['name'] = customer['email']
-                    vals['email'] = customer['email']
-                    vals['phone'] = customer['phone']
-                    vals['shopify_customer_id'] = customer['id']
-                    vals['shopify_instance_id'] = shopify_instance.id
-                    vals['synced_customer'] = True
-                    vals['company_id'] = shopify_instance.company_id.id
                     if customer['addresses']:
                         country_id = self.env['res.country'].sudo().search([
                             ('name', '=', customer['addresses'][0]['country'])
@@ -193,8 +176,25 @@ class CustomerWizard(models.TransientModel):
                             'street': customer['addresses'][0]['address1'],
                             'street2': customer['addresses'][0]['address2'],
                             'city': customer['addresses'][0]['city'],
-                            'country_id': country_id.id if country_id else '',
-                            'state_id': state_id.id if state_id else '',
+                            'country_id': country_id.id if country_id else False,
+                            'state_id': state_id.id if state_id else False,
                             'zip': customer['addresses'][0]['zip'],
                         }
+                    if customer['first_name']:
+                        vals['name'] = customer['first_name']
+                    if customer['last_name']:
+                        if customer['first_name']:
+                            vals['name'] = customer['first_name'] + ' ' + \
+                                           customer['last_name']
+                        else:
+                            vals['name'] = customer['last_name']
+                    if not customer['first_name'] and not customer[
+                        'last_name'] and customer['email']:
+                        vals['name'] = customer['email']
+                    vals['email'] = customer['email']
+                    vals['phone'] = customer['phone']
+                    vals['shopify_customer_id'] = customer['id']
+                    vals['shopify_instance_id'] = shopify_instance.id
+                    vals['synced_customer'] = True
+                    vals['company_id'] = shopify_instance.company_id.id
                     self.env['res.partner'].sudo().write(vals)

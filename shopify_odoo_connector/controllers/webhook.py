@@ -92,7 +92,7 @@ class WebHook(http.Controller):
                     'company_id': shopify_instance_id.company_id.id,
                 })
             if request.jsonrequest['options']:
-                for option in request.jsonrequest['option']:
+                for option in request.jsonrequest['options']:
                     attribute_id = self.env[
                         'product.attribute'].with_user(SUPERUSER_ID).search(
                         [
@@ -101,7 +101,7 @@ class WebHook(http.Controller):
                         ])
                     # att_val_ids = attribute_id.value_ids
                     att_val_ids = self.env[
-                        'product_attribute.value'].with_user(
+                        'product.attribute.value'].with_user(
                         SUPERUSER_ID).search([
                         ('name', 'in', option['values']),
                         ('attribute_id', '=', attribute_id.id)
@@ -130,7 +130,7 @@ class WebHook(http.Controller):
                                 attribute_id = self.env[
                                     'product.attribute'].sudo().search(
                                     [
-                                        ('shopify_attrbute_id', '=',
+                                        ('shopify_attribute_id', '=',
                                          option['id']),
                                         ('shopify_instance_id', '=',
                                          shopify_instance_id.id)
@@ -452,24 +452,6 @@ class WebHook(http.Controller):
                 ('shop_name', 'like', shop_name)
             ], limit=1)
             vals = {}
-            if request.jsonrequest['first_name']:
-                vals['name'] = request.jsonrequest['first_name']
-            if request.jsonrequest['last_name']:
-                if request.jsonrequest['first_name']:
-                    vals['name'] = request.jsonrequest['first_name'] + ' ' + \
-                                   request.jsonrequest['last_name']
-                else:
-                    vals['naem'] = request.jsonrequest['last_name']
-            if not request.jsonrequest['first_name'] and not \
-                    request.jsonrequest[
-                        'last_name'] and request.jsonrequest['email']:
-                vals['name'] = request.jsonrequest['email']
-            vals['email'] = request.jsonrequest['email']
-            vals['phone'] = request.jsonrequest['phone']
-            vals['shopify_customer_id'] = request.jsonrequest['id']
-            vals['shopify_instance_id'] = shopify_instance_id.id
-            vals['synced_customer'] = True
-            vals['company_id'] = shopify_instance_id.company_id.id
             if request.jsonrequest['addresses']:
                 country_id = self.env['res.country'].sudo().search([
                     (
@@ -486,10 +468,28 @@ class WebHook(http.Controller):
                     'street2': request.jsonrequest['addresses'][0][
                         'address2'],
                     'city': request.jsonrequest['addresses'][0]['city'],
-                    'country_id': country_id.id if country_id else '',
-                    'state_id': state_id.id if state_id else '',
+                    'country_id': country_id.id if country_id else False,
+                    'state_id': state_id.id if state_id else False,
                     'zip': request.jsonrequest['addresses'][0]['zip'],
                 }
+            if request.jsonrequest['first_name']:
+                vals['name'] = request.jsonrequest['first_name']
+            if request.jsonrequest['last_name']:
+                if request.jsonrequest['first_name']:
+                    vals['name'] = request.jsonrequest['first_name'] + ' ' + \
+                                   request.jsonrequest['last_name']
+                else:
+                    vals['name'] = request.jsonrequest['last_name']
+            if not request.jsonrequest['first_name'] and not \
+                    request.jsonrequest[
+                        'last_name'] and request.jsonrequest['email']:
+                vals['name'] = request.jsonrequest['email']
+            vals['email'] = request.jsonrequest['email']
+            vals['phone'] = request.jsonrequest['phone']
+            vals['shopify_customer_id'] = request.jsonrequest['id']
+            vals['shopify_instance_id'] = shopify_instance_id.id
+            vals['synced_customer'] = True
+            vals['company_id'] = shopify_instance_id.company_id.id
             customer_id = request.env['res.partner'].with_user(
                 SUPERUSER_ID).search([
                 ('shopify_customer_id', '=', request.jsonrequest['id']),
@@ -516,24 +516,6 @@ class WebHook(http.Controller):
                 ('shop_name', 'like', shop_name)
             ], limit=1)
             vals = {}
-            if request.jsonrequest['first_name']:
-                vals['name'] = request.jsonrequest['first_name']
-            if request.jsonrequest['last_name']:
-                if request.jsonrequest['first_name']:
-                    vals['name'] = request.jsonrequest['first_name'] + ' ' + \
-                                   request.jsonrequest['last_name']
-                else:
-                    vals['naem'] = request.jsonrequest['last_name']
-            if not request.jsonrequest['first_name'] and not \
-                    request.jsonrequest[
-                        'last_name'] and request.jsonrequest['email']:
-                vals['name'] = request.jsonrequest['email']
-            vals['email'] = request.jsonrequest['email']
-            vals['phone'] = request.jsonrequest['phone']
-            vals['shopify_customer_id'] = request.jsonrequest['id']
-            vals['shopify_instance_id'] = shopify_instance_id.id
-            vals['synced_customer'] = True
-            vals['company_id'] = shopify_instance_id.company_id.id
             if request.jsonrequest['addresses']:
                 country_id = self.env['res.country'].sudo().search([
                     (
@@ -550,10 +532,28 @@ class WebHook(http.Controller):
                     'street2': request.jsonrequest['addresses'][0][
                         'address2'],
                     'city': request.jsonrequest['addresses'][0]['city'],
-                    'country_id': country_id.id if country_id else '',
-                    'state_id': state_id.id if state_id else '',
+                    'country_id': country_id.id if country_id else False,
+                    'state_id': state_id.id if state_id else False,
                     'zip': request.jsonrequest['addresses'][0]['zip'],
                 }
+            if request.jsonrequest['first_name']:
+                vals['name'] = request.jsonrequest['first_name']
+            if request.jsonrequest['last_name']:
+                if request.jsonrequest['first_name']:
+                    vals['name'] = request.jsonrequest['first_name'] + ' ' + \
+                                   request.jsonrequest['last_name']
+                else:
+                    vals['name'] = request.jsonrequest['last_name']
+            if not request.jsonrequest['first_name'] and not \
+                    request.jsonrequest[
+                        'last_name'] and request.jsonrequest['email']:
+                vals['name'] = request.jsonrequest['email']
+            vals['email'] = request.jsonrequest['email']
+            vals['phone'] = request.jsonrequest['phone']
+            vals['shopify_customer_id'] = request.jsonrequest['id']
+            vals['shopify_instance_id'] = shopify_instance_id.id
+            vals['synced_customer'] = True
+            vals['company_id'] = shopify_instance_id.company_id.id
             customer_id = request.env['res.partner'].with_user(
                 SUPERUSER_ID).search([
                 ('shopify_customer_id', '=', request.jsonrequest['id']),

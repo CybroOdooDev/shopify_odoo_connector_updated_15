@@ -41,6 +41,7 @@ class OrderWizard(models.TransientModel):
                                           string="Shopify Instance",
                                           required=True)
 
+
     def sync_orders(self):
         shopify_instance = self.shopify_instance_id
         api_key = self.shopify_instance_id.con_endpoint
@@ -81,7 +82,7 @@ class OrderWizard(models.TransientModel):
                                                 headers=headers,
                                                 data=payload)
         else:
-            order_url = "https://%s:%s@%s/admin/api/%s/draft_orders.json" % (
+            order_url = "https://%s:%s@%s/admin/api/%s/orders.json" % (
                 api_key, PASSWORD, store_name, version)
             payload = []
             headers = {
@@ -92,7 +93,7 @@ class OrderWizard(models.TransientModel):
                                         data=payload)
             j = response.json()
             vals = {}
-            for each in j['draft_orders']:
+            for each in j['orders']:
                 shopify_id = each['id']
                 existing_order = self.env['sale.order'].search(
                     [('shopify_order_id', '=', shopify_id)])
@@ -195,7 +196,6 @@ class OrderWizard(models.TransientModel):
                                     'shopify_instance_id': shopify_instance.id,
                                     'company_id': shopify_instance.company_id.id,
                                     'synced_product': True,
-                                    'description': line['body_html'],
                                 })
                         str_list = []
                         for desc_index in line['discount_allocations']:

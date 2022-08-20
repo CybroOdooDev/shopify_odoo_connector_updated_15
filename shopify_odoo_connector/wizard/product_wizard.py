@@ -134,7 +134,7 @@ class ProductWizard(models.TransientModel):
             for product in shopify_products:
                 exist_products = self.env['product.template'].search(
                     [('shopify_product_id', '=', product['id']),
-                     ('shopify_instance', '=', shopify_instance.id)])
+                     ('shopify_instance_id', '=', shopify_instance.id)])
                 if not exist_products:
                     if product['options']:
                         for option in product['options']:
@@ -171,7 +171,7 @@ class ProductWizard(models.TransientModel):
                                     attribute_id.sudo().write({
                                         'value_ids': [(0, 0, att_val)]
                                     })
-                    product_id = self.env['product_template'].sudo().create({
+                    product_id = self.env['product.template'].sudo().create({
                         'name': product['title'],
                         'type': 'product',
                         'categ_id': self.env.ref(
@@ -183,7 +183,7 @@ class ProductWizard(models.TransientModel):
                         'company_id': shopify_instance.company_id.id,
                     })
                     if product['options']:
-                        for option in product['option']:
+                        for option in product['options']:
                             attribute_id = self.env[
                                 'product.attribute'].sudo().search([
                                 ('shopify_attribute_id', '=', option['id']),
@@ -192,7 +192,7 @@ class ProductWizard(models.TransientModel):
                                     shopify_instance.id)
                             ])
                             att_val_ids = self.env[
-                                'product_attribute.value'].sudo().search([
+                                'product.attribute.value'].sudo().search([
                                 ('name', 'in', option['values']),
                                 ('attribute_id', '=', attribute_id.id)
                             ])
@@ -220,7 +220,7 @@ class ProductWizard(models.TransientModel):
                                         attribute_id = self.env[
                                             'product.attribute'].sudo().search(
                                             [
-                                                ('shopify_attrbute_id', '=',
+                                                ('shopify_attribute_id', '=',
                                                  option['id']),
                                                 ('shopify_instance_id', '=',
                                                  shopify_instance.id)
