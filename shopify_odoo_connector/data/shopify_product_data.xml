@@ -5,7 +5,7 @@
             <field name="parent_id" ref="product.product_category_all"/>
             <field name="name">Shopify Shipping</field>
         </record>
-        <record id="product_category_shopify_refund_cost" modle="product.category">
+        <record id="product_category_shopify_refund_cost" model="product.category">
             <field name="parent_id" ref="product.product_category_all"/>
             <field name="name">Shopify Refund</field>
         </record>
