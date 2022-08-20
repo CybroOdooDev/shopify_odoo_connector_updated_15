@@ -98,7 +98,7 @@ class OrderWizard(models.TransientModel):
                 existing_order = self.env['sale.order'].search(
                     [('shopify_order_id', '=', shopify_id)])
                 if not existing_order:
-                    if each['customer']:
+                    if 'customer' in each.keys():
                         customer_id = each['customer'].get('id')
                         customer_name = each['customer'].get(
                             'first_name') + ' ' + each['customer'].get(
@@ -220,12 +220,12 @@ class OrderWizard(models.TransientModel):
                         line_vals = {
                             'product_id': product_id,
                             'price_unit': line['price'],
-                            'quantity': line['quantity'],
+                            'product_uom_qty': line['quantity'],
                             'currency_id': currency.id,
                             'discount': (float(discount) / float(
                                 line['price']) * 100) / float(line['quantity'])
                             if discount else 0,
-                            'tax_ids': [
+                            'tax_id': [
                                 (6, 0, tax_name.ids)] if tax_name else False,
                             'shopify_line_id': line['id'],
                             'shopify_instance_id': shopify_instance.id,
@@ -254,7 +254,7 @@ class OrderWizard(models.TransientModel):
                     if each['shipping_lines']:
                         shipping_lines = each['shipping_lines']
                         product_id = self.env.ref(
-                            'shopify_plus.product_shopify_shipping')
+                            'shopify_odoo_connector.product_shopify_shipping_cost')
                         for line in shipping_lines:
                             line_vals = {
                                 'product_id': product_id.id,

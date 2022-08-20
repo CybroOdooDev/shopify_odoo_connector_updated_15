@@ -22,7 +22,7 @@
 ################################################################################
 {
     'name': "Shopify Odoo Connector",
-    'version': '15.0.1.0.1',
+    'version': '15.0.1.0.2',
     'summary': """Shopify Odoo Connector enables users to connect with shopify 
     to odoo and sync sale orders, customers and products""",
     'description': """Shopify Odoo Connector, Odoo Shopify Connector, Shopify, 
@@ -39,6 +39,7 @@
     'data': [
         'security/security.xml',
         'security/ir.model.access.csv',
+        'data/shopify_product_data.xml',
         'views/shopify_dashboard_views.xml',
         'views/shopify.xml',
         'views/res_partner_views.xml',
